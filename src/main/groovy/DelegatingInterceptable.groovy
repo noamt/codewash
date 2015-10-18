@@ -5,7 +5,7 @@ class DelegatingInterceptable extends DelegatingScript implements GroovyIntercep
 
     @Override
     Object run() {
-        return 'jim'
+        ''
     }
 
     @Override
@@ -14,8 +14,7 @@ class DelegatingInterceptable extends DelegatingScript implements GroovyIntercep
             return super.setDelegate(args)
         }
         if ((!DelegatingScript.declaredMethods.any { it.name == name }) &&
-                name != 'run' &&
-        name != 'getBinding') {
+                name != 'run' && name != 'getBinding') {
             binding.dataCollector.methodInvoked(name, args)
         }
 

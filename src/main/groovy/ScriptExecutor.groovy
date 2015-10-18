@@ -1,16 +1,18 @@
 import org.codehaus.groovy.control.CompilerConfiguration
 
+import java.nio.file.Paths
+
 /**
  * @author Noam Y. Tenne
  */
-class ScriptLoader {
+class ScriptExecutor {
 
     public static void main(String[] args) {
-        def loader = new ScriptLoader()
-        loader.go()
+        def loader = new ScriptExecutor()
+        loader.go(Paths.get('/home/noam/work/private/codewash/examples/splitMethodsCorrect.groovy').text)
     }
 
-    void go() {
+    public ExecutedScriptReport go(String scriptSource) {
         def compilerConfiguration = new CompilerConfiguration()
         compilerConfiguration.scriptBaseClass = DelegatingInterceptable.class.name
 
@@ -19,11 +21,11 @@ class ScriptLoader {
 
         def shell = new GroovyShell(this.class.classLoader, binding, compilerConfiguration)
 
-        DelegatingScript script = shell.parse(new File('/home/noam/work/private/codewash/examples/splitMethodsCorrect.groovy'))
+        DelegatingScript script = shell.parse(scriptSource)
         def evaluator = new Evaluator()
         script.setDelegate(evaluator)
-        println script.run()
+        def result = script.run()
 
-        println "${collector.invokedMethods.size()} methods were invoked"
+        new ExecutedScriptReport(result: result, invokedMethods: collector.invokedMethods)
     }
 }
