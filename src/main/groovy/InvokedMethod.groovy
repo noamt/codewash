@@ -3,5 +3,4 @@
  */
 class InvokedMethod {
     String name
-    Object args
 }
