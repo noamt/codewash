@@ -41,7 +41,9 @@ def getTheI() {
         then:
         executionReport.result == 'jim'
         executionReport.invokedMethods.size() == 1
-        executionReport.invokedMethods.first().name == 'getTheI'
+        def invokedMethod = executionReport.invokedMethods.first()
+        invokedMethod.name == 'getTheI'
+        invokedMethod.length == 1
     }
 
     def 'Execute a script with three method invocations'() {
@@ -75,6 +77,7 @@ def getTheM() {
         invokedMethods.get(0).name == 'getTheJ'
         invokedMethods.get(1).name == 'getTheI'
         invokedMethods.get(2).name == 'getTheM'
+        invokedMethods.every { it.length == 1}
     }
 
     def 'Execute a script with a nested method invocation'() {
@@ -99,6 +102,8 @@ def getTheM() {
         then:
         executionReport.result == 'jim'
         executionReport.invokedMethods.size() == 1
-        executionReport.invokedMethods.first().name == 'getTheIAndTheM'
+        def method = executionReport.invokedMethods.first()
+        method.name == 'getTheIAndTheM'
+        method.length == 1
     }
 }

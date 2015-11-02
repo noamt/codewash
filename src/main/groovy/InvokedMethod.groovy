@@ -3,4 +3,5 @@
  */
 class InvokedMethod {
     String name
+    int length
 }
