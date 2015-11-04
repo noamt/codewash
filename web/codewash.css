@@ -1,3 +1,11 @@
+.game  {
+    height : 40%;
+    width: 90%;
+    margin: 0 auto;
+}
+
 .ace_editor  {
-    height : 200px;
+    height : 40%;
+    width: 50%;
+    margin: 5% auto;
 }
