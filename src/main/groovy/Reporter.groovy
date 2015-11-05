@@ -4,6 +4,7 @@ import org.codehaus.groovy.ast.MethodNode
 import org.codehaus.groovy.ast.builder.AstBuilder
 import org.codehaus.groovy.ast.expr.BinaryExpression
 import org.codehaus.groovy.ast.expr.DeclarationExpression
+import org.codehaus.groovy.ast.expr.Expression
 import org.codehaus.groovy.ast.expr.MethodCallExpression
 import org.codehaus.groovy.ast.stmt.BlockStatement
 import org.codehaus.groovy.ast.stmt.Statement
@@ -52,9 +53,9 @@ class Reporter {
 
     private Collection<InvokedMethod> resolveMethodInvocations(List<ASTNode> scriptAst, Collection<Statement> potentialMethodInvocations) {
         ClassNode scriptClassNode = scriptAst.last()
-        def methodInvocations = potentialMethodInvocations.findResults {
-            if (expressionIsMethodCall(it)) {
-                def methodName = it.method.value
+        def methodInvocations = potentialMethodInvocations.findResults { expression ->
+            if (expressionIsMethodCall(expression)) {
+                def methodName = expression.method.value
                 MethodNode method = scriptClassNode.methods.find { it.name == methodName }
                 return new InvokedMethod(name: methodName, length: (method.lastLineNumber - method.lineNumber - 1))
             }
@@ -63,11 +64,11 @@ class Reporter {
         methodInvocations
     }
 
-    private boolean expressionIsMethodCall(Statement blockExpression) {
+    private boolean expressionIsMethodCall(blockExpression) {
         blockExpression instanceof MethodCallExpression
     }
 
-    private boolean expressionIsNesting(Statement blockExpression) {
+    private boolean expressionIsNesting(blockExpression) {
         (blockExpression.expression instanceof DeclarationExpression) ||
                 (blockExpression.expression instanceof BinaryExpression)
     }
