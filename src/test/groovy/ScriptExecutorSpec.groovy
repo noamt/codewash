@@ -1,3 +1,4 @@
+import spock.lang.IgnoreRest
 import spock.lang.Specification
 
 /**
@@ -105,5 +106,41 @@ def getTheM() {
         def method = executionReport.invokedMethods.first()
         method.name == 'getTheIAndTheM'
         method.length == 1
+    }
+
+    def 'Execute a script with a method that throws a checked exception'() {
+        setup:
+        def executor = new ScriptExecutor()
+
+        when:
+        def executionReport = executor.go("""
+getTheI()
+
+def getTheI() throws Exception {
+   'i'
+}
+""")
+
+        then:
+        def invokedMethod = executionReport.invokedMethods.first()
+        invokedMethod.exceptions.first() == 'java.lang.Exception'
+    }
+
+    def 'Execute a script with a method that throws an unchecked exception'() {
+        setup:
+        def executor = new ScriptExecutor()
+
+        when:
+        def executionReport = executor.go("""
+getTheI()
+
+def getTheI() throws IllegalArgumentException {
+   'i'
+}
+""")
+
+        then:
+        def invokedMethod = executionReport.invokedMethods.first()
+        invokedMethod.exceptions.first() == 'java.lang.IllegalArgumentException'
     }
 }

@@ -5,11 +5,11 @@ html = addHead(html)
 html = surroundWithHtml(html)
 html
 
-String addBody(String html) {
+String addBody(String html) throws IllegalArgumentException {
     html + 'This is the html body'
 }
 
-String surroundBody(String html) {
+String surroundBody(String html) throws IOException {
     '<body>' + html + '</body>'
 }
 

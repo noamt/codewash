@@ -4,9 +4,9 @@ import org.codehaus.groovy.ast.MethodNode
 import org.codehaus.groovy.ast.builder.AstBuilder
 import org.codehaus.groovy.ast.expr.BinaryExpression
 import org.codehaus.groovy.ast.expr.DeclarationExpression
-import org.codehaus.groovy.ast.expr.Expression
 import org.codehaus.groovy.ast.expr.MethodCallExpression
 import org.codehaus.groovy.ast.stmt.BlockStatement
+import org.codehaus.groovy.ast.stmt.ExpressionStatement
 import org.codehaus.groovy.ast.stmt.Statement
 import org.codehaus.groovy.control.CompilePhase
 
@@ -46,6 +46,9 @@ class Reporter {
             if (expressionIsNesting(blockExpression)) {
                 return blockExpression.expression.rightExpression
             }
+            if (expressionIsStatement(blockExpression)) {
+                return blockExpression.expression
+            }
             null
         }
         potentialMethodInvocations
@@ -57,7 +60,10 @@ class Reporter {
             if (expressionIsMethodCall(expression)) {
                 def methodName = expression.method.value
                 MethodNode method = scriptClassNode.methods.find { it.name == methodName }
-                return new InvokedMethod(name: methodName, length: (method.lastLineNumber - method.lineNumber - 1))
+                return new InvokedMethod(name: methodName,
+                        length: (method.lastLineNumber - method.lineNumber - 1),
+                        exceptions: method.exceptions.collect { it.name }
+                )
             }
             null
         }
@@ -71,5 +77,9 @@ class Reporter {
     private boolean expressionIsNesting(blockExpression) {
         (blockExpression.expression instanceof DeclarationExpression) ||
                 (blockExpression.expression instanceof BinaryExpression)
+    }
+
+    private boolean expressionIsStatement(blockExpression) {
+        blockExpression instanceof ExpressionStatement
     }
 }
