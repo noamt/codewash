@@ -21,6 +21,21 @@ document.onreadystatechange = function () {
             }
         });
 
+        var playerLayer = game.createLayer("players");
+        var mal = new PixelJS.Player();
+        mal.addToLayer(playerLayer);
+        mal.pos = { x: 200, y: 300 };
+        mal.size = { width: 32, height: 32 };
+        mal.velocity = { x: 100, y: 100 };
+        mal.asset = new PixelJS.AnimatedSprite();
+        mal.asset.prepare({
+            name: 'mal.sprite.png',
+            frames: 3,
+            rows: 4,
+            speed: 100,
+            defaultFrame: 1
+        });
+
         game.loadAndRun(function (elapsedTime, dt) {
         });
     }
