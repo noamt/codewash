@@ -1,0 +1,7 @@
+{
+  "name": "CodeWash",
+  "dependencies": {
+    "angular-ui-ace": "*",
+    "phaser": "*"
+  }
+}
