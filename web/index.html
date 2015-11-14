@@ -5,13 +5,39 @@
     <script type="text/javascript" src="bower_components/ace-builds/src-min-noconflict/ace.js"></script>
     <script type="text/javascript" src="bower_components/angular/angular.js"></script>
     <script type="text/javascript" src="bower_components/angular-ui-ace/ui-ace.js"></script>
+    <script type="text/javascript" src="bower_components/phaser/build/phaser.js"></script>
     <script type="text/javascript" src="js/codewash.js"></script>
     <link rel="stylesheet" type=" text/css" href="codewash.css"/>
 </head>
 <body>
 <div id="game_container" style="position: relative; margin: 0 auto; width: 800px; height: 450px;">
 </div>
+<script type="text/javascript">
+    var game = new Phaser.Game(800, 450, Phaser.AUTO, 'game_container', {preload: preload, create: create, update: update});
+    function preload() {
+        game.load.image('dirt', 'assets/fulldirt2.png');
+        game.load.image('container', 'assets/container.png');
+        game.load.spritesheet('mal', 'assets/mal.sprite.png');
+    }
 
+    var containers;
+    function create() {
+        game.add.sprite(0, 0, 'dirt');
+        var containers = game.add.group();
+        containers.enableBody = true;
+
+        var container = containers.create(50, 50, 'container');
+        container.body.immovable = false;
+
+        container = containers.create(300, 320, 'container');
+        container.body.immovable = false;
+
+        container = containers.create(500, 320, 'container');
+        container.body.immovable = false;
+    }
+    function update() {
+    }
+</script>
 <section>
     <div ui-ace="{mode: 'groovy'}"></div>
 </section>
