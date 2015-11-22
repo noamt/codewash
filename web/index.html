@@ -6,88 +6,16 @@
     <script type="text/javascript" src="bower_components/angular/angular.js"></script>
     <script type="text/javascript" src="bower_components/angular-ui-ace/ui-ace.js"></script>
     <script type="text/javascript" src="bower_components/phaser/build/phaser.js"></script>
+    <script type="text/javascript" src="js/Boot.js"></script>
+    <script type="text/javascript" src="js/Preload.js"></script>
+    <script type="text/javascript" src="js/Game.js"></script>
     <script type="text/javascript" src="js/codewash.js"></script>
     <link rel="stylesheet" type=" text/css" href="codewash.css"/>
 </head>
 <body>
 <div id="game_container" style="position: relative; margin: 0 auto; width: 800px; height: 450px;">
+    <script type="text/javascript" src="js/Main.js"></script>
 </div>
-<script type="text/javascript">
-    var game = new Phaser.Game(800, 450, Phaser.AUTO, 'game_container', {preload: preload, create: create, update: update});
-    function preload() {
-        game.load.image('dirt', 'assets/fulldirt2.png');
-        game.load.image('container', 'assets/container.png');
-        game.load.spritesheet('mal', 'assets/mal.sprite.png', 32, 32);
-    }
-
-    var containers;
-    var mal;
-    var cursors;
-
-    function create() {
-        game.physics.startSystem(Phaser.Physics.ARCADE);
-
-        game.add.sprite(0, 0, 'dirt');
-
-        containers = game.add.group();
-        containers.enableBody = true;
-
-        var container = containers.create(50, 50, 'container');
-        container.body.immovable = true;
-
-        container = containers.create(300, 320, 'container');
-        container.body.immovable = true;
-
-        container = containers.create(500, 320, 'container');
-        container.body.immovable = true;
-
-        mal = game.add.sprite(32, game.world.height - 150, 'mal');
-
-        game.physics.arcade.enable(mal);
-
-        mal.body.bounce.y = 0.1;
-        mal.body.gravity.y = 500;
-        mal.body.collideWorldBounds = true;
-
-        mal.animations.add('left', [0], 1, true);
-        mal.animations.add('right', [1], 1, true);
-        cursors = game.input.keyboard.createCursorKeys();
-    }
-    function update() {
-        game.physics.arcade.collide(mal, containers);
-
-        //  Reset the players velocity (movement)
-        mal.body.velocity.x = 0;
-
-        if (cursors.left.isDown)
-        {
-            //  Move to the left
-            mal.body.velocity.x = -150;
-
-            mal.animations.play('left');
-        }
-        else if (cursors.right.isDown)
-        {
-            //  Move to the right
-            mal.body.velocity.x = 150;
-
-            mal.animations.play('right');
-        }
-        else
-        {
-            //  Stand still
-            mal.animations.stop();
-
-            mal.frame = 4;
-        }
-
-        //  Allow the player to jump if they are touching the ground.
-        if (cursors.up.isDown)
-        {
-            mal.body.velocity.y = -350;
-        }
-    }
-</script>
 <section>
     <div ui-ace="{mode: 'groovy'}"></div>
 </section>
