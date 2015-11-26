@@ -7,6 +7,29 @@ var CodewashGame = CodewashGame || {};
 CodewashGame.Game = function(){};
 
 CodewashGame.Game.prototype = {
+    create: function() {
+        this.map = this.game.add.tilemap('firstLevel');
+
+        //the first parameter is the tileset name as specified in Tiled, the second is the key to the asset
+        this.map.addTilesetImage('dirtTile', 'dirtTile', 32, 32);
+        this.map.addTilesetImage('dirtPathTile', 'dirtPathTile', 32 ,32);
+        this.map.addTilesetImage('container', 'container', 60, 60);
+        this.map.addTilesetImage('bluesun', 'bluesun', 60, 78);
+        this.map.addTilesetImage('entrance', 'entrance', 60, 80);
+
+        //create layer
+        this.dirtLayer = this.map.createLayer('dirtLayer');
+        this.middleGroundLayer = this.map.createLayer('middleGroundLayer');
+
+        //collision on blockedLayer
+        this.map.setCollisionBetween(1, 100000, true, 'middleGroundLayer');
+
+        //resizes the game world to match the layer dimensions
+        this.dirtLayer.resizeWorld();
+
+        //this.createItems();
+        this.createEntrances();
+    },
     //find objects in a Tiled layer that containt a property called "type" equal to a certain value
     findObjectsByType: function(type, map, layer) {
         var result = new Array();
@@ -49,25 +72,5 @@ CodewashGame.Game.prototype = {
         result.forEach(function(element){
             this.createFromTiledObject(element, this.entrances);
         }, this);
-    },
-    create: function() {
-        this.map = this.game.add.tilemap('firstLevel');
-
-        //the first parameter is the tileset name as specified in Tiled, the second is the key to the asset
-        this.map.addTilesetImage('dirtTile', 'dirtTile');
-        this.map.addTilesetImage('dirtPathTile', 'dirtPathTile');
-
-        //create layer
-        this.dirtLayer = this.map.createLayer('dirtLayer');
-        this.middleGroundLayer = this.map.createLayer('middleGroundLayer');
-
-        //collision on blockedLayer
-        this.map.setCollisionBetween(1, 100000, true, 'middleGroundLayer');
-
-        //resizes the game world to match the layer dimensions
-        this.dirtLayer.resizeWorld();
-
-        this.createItems();
-        this.createEntrances();
     }
 };

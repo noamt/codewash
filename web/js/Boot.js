@@ -8,10 +8,10 @@ CodewashGame.Boot = function () {
 
 //setting game configuration and loading the assets for the loading screen
 CodewashGame.Boot.prototype = {
-//        preload: function() {
+        preload: function() {
 //            //assets we'll use in the loading screen
 //            this.load.image('preloadbar', 'assets/images/preloader-bar.png');
-//        },
+        },
     create: function () {
         //loading screen will have a white background
         this.game.stage.backgroundColor = '#fff';
